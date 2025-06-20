@@ -21,73 +21,26 @@
             <div class="sobre">
                 <div class="carta">
                     <div class="contenido">
-        <p><strong>Şeyy</strong></p>
-        <p>
-            "Biliyor musun, bazen kendime şaşıyorum… Çünkü içimde sana karşı büyüyen bu duygular, her geçen gün sanki tekrardan aşık oluyorum. İlk günkü heyecanla kalbim çarpıyor her sesini duyduğumda, her gözlerine baktığımda. Seni tanıdıkça hayranlığım daha da büyüyor büyüleyici bir kadınsın kesinlikle ; senin o tatlı gülümsemelerin, tatlı bakışların, kehribar gözlerin o tatlı yanakların en basit hareketlerin bile içimde fırtınalar koparıyor. Hep derdim, insan bir kere âşık olur diye... Ama sen bana her gün yeniden aşık olmanın ne demek olduğunu öğrettin. İnan bana, içimdeki bu sevgi hiç eksilmiyor; aksine büyüyor, çoğalıyor ve her an seni daha çok seviyorum. Bazen kendi kalp atışlarımı bile anlamakta zorlanıyorum... Belki bu da aşkın en güzel şaşkınlığıdır hayranım sana kadın...."
-        </p>
-        <div class="buttons">
-            <button class="btn btn-yes" id="yesBtn">Evet 💖</button>
-            <button class="btn btn-no" id="noBtn">Hayır</button>
+                        <strong>Şeyy</strong>
+                        <p>
+                            "Bunu sana söylemek için doğru zamanı bekledim… Çünkü seninle her konuştuğumda, içimde bir şeyler değişti. Seni tanıdıkça, kelimeler daha anlamlı, günler daha güzel olmaya başladı. Artık seninle sadece konuşmak değil, daha fazlasını yaşamak istiyorum. Eğer sen de istersen… benimle bir adım daha ileri gider misin? <strong>Benimle çıkar mısın?"</strong> 
+                        </p>
+                        <div class="evet-hayir-anim-wrap">
+                            <div class="evet-hayir-container" id="butonlar">
+                                <a class='evet-buton' href='/index-copy'>Evet 💖</a>
+                                <button type="button" class="evet-buton" id="hayir-btn">HAYIR</button>
+                            </div>
+                            <div id="hayir-error" class="hayir-error">ERROR (Hayır cevabı bulunamadı!)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="corazon"></div>
+            <div class="solapa-derecha"></div>
+            <div class="solapa-izquierda"></div>
         </div>
-        <div class="error-message" id="errorMsg">ERROR (Hayır cevabı bulunamadı!)</div>
     </div>
 
-    <div class="love-text" id="loveText">Seni Seviyorum 💞</div>
-    <canvas id="heartCanvas"></canvas>
-
-    <script>
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const errorMsg = document.getElementById('errorMsg');
-        const messageBox = document.getElementById('message-box');
-        const loveText = document.getElementById('loveText');
-        const canvas = document.getElementById('heartCanvas');
-        const ctx = canvas.getContext('2d');
-
-        noBtn.addEventListener('click', () => { errorMsg.style.display = 'block'; });
-
-        yesBtn.addEventListener('click', () => {
-            messageBox.style.display = 'none';
-            loveText.style.display = 'block';
-            canvas.style.display = 'block';
-            resizeCanvas();
-            startHearts();
-        });
-
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-
-        let hearts = [];
-        function startHearts() {
-            setInterval(() => {
-                hearts.push({ x: Math.random() * canvas.width, y: canvas.height + 10, size: Math.random() * 20 + 10, speed: Math.random() * 2 + 1 });
-            }, 300);
-            requestAnimationFrame(animate);
-        }
-
-        function drawHeart(x, y, size) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.bezierCurveTo(x, y - size/2, x - size, y - size/2, x - size, y);
-            ctx.bezierCurveTo(x - size, y + size, x, y + size * 1.5, x, y + size * 2);
-            ctx.bezierCurveTo(x, y + size * 1.5, x + size, y + size, x + size, y);
-            ctx.bezierCurveTo(x + size, y - size/2, x, y - size/2, x, y);
-            ctx.closePath();
-            ctx.fillStyle = '#ff69b4';
-            ctx.fill();
-            ctx.restore();
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < hearts.length; i++) {
-                hearts[i].y -= hearts[i].speed;
-                drawHeart(hearts[i].x, hearts[i].y, hearts[i].size);
-            }
-            hearts = hearts.filter(h => h.y + h.size * 2 > 0);
-            requestAnimationFrame(animate);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
