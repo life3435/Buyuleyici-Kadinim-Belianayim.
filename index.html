@@ -3,69 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bir Yeni Mesaj</title>
+    <title>Sana Bir Mesajım Var</title>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Trebuchet MS', sans-serif; background: #fff0f5; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
-        h1 { color: #ff5e78; font-size: 40px; text-align: center; margin: 20px; }
-        .carta { background: #fff; border: 2px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 500px; text-align: center; }
-        .buttons { margin-top: 20px; }
-        .btn { padding: 10px 20px; margin: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; transition: 0.3s; }
-        .btn-yes { background-color: #ff5e78; color: white; }
+        body { margin: 0; padding: 0; font-family: 'Trebuchet MS', sans-serif; background: #1a1a1a; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        h1 { font-size: 35px; text-align: center; margin: 20px; }
+        .question { font-size: 25px; margin-bottom: 20px; }
+        .buttons { margin: 20px; }
+        .btn { padding: 10px 20px; margin: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 20px; transition: 0.3s; }
+        .btn-yes { background-color: #ff4081; color: white; }
         .btn-no { background-color: #555; color: white; }
         .btn:hover { transform: scale(1.1); }
-        .error-message { color: red; margin-top: 10px; display: none; }
-        .love-text { position: absolute; top: 20px; width: 100%; text-align: center; font-size: 40px; color: #ff69b4; font-weight: bold; display: none; }
-        canvas { position: absolute; top: 0; left: 0; display: none; }
+        .error-message { color: red; font-size: 20px; margin-top: 10px; display: none; }
+        .envelope-container { position: relative; width: 300px; height: 200px; margin-top: 20px; display: none; cursor: pointer; }
+        .envelope { position: absolute; width: 100%; height: 100%; background: #fff5f5; border: 2px solid #ff5e78; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-bottom: 100px solid #ff5e78; z-index: 2; transition: transform 1s; transform-origin: top center; }
+        .letter { position: absolute; top: 100px; left: 10px; right: 10px; height: 80px; background: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1; transition: top 1s; padding: 10px; text-align: center; }
+        .opened .flap { transform: rotateX(-180deg); }
+        .opened .letter { top: -200px; }
+        .message-container { display: none; max-width: 700px; text-align: center; background: #fff; color: #333; padding: 30px; border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .next-btn { margin-top: 20px; padding: 15px 30px; font-size: 20px; border: none; border-radius: 10px; background: #ff4081; color: #fff; cursor: pointer; }
+        canvas { position: fixed; top: 0; left: 0; display: none; }
     </style>
 </head>
 <body>
-    <h1>Bir Yeni Mesaj<br><span style="font-size:25px">(Kalbe tıklar mısın?..)</span></h1>
-    <div class="carta" id="message-box">
-        <p><strong>Şeyy</strong></p>
-        <p>
-            "Biliyor musun, bazen kendime şaşıyorum… Çünkü içimde sana karşı büyüyen bu duygular, her geçen gün sanki tekrardan aşık oluyorum. İlk günkü heyecanla kalbim çarpıyor her sesini duyduğumda, her gözlerine baktığımda. Seni tanıdıkça hayranlığım daha da büyüyor büyüleyici bir kadınsın kesinlikle ; senin o tatlı gülümsemelerin, tatlı bakışların, kehribar gözlerin o tatlı yanakların en basit hareketlerin bile içimde fırtınalar koparıyor. Hep derdim, insan bir kere âşık olur diye... Ama sen bana her gün yeniden aşık olmanın ne demek olduğunu öğrettin. İnan bana, içimdeki bu sevgi hiç eksilmiyor; aksine büyüyor, çoğalıyor ve her an seni daha çok seviyorum. Bazen kendi kalp atışlarımı bile anlamakta zorlanıyorum... Belki bu da aşkın en güzel şaşkınlığıdır hayranım sana kadın...."
-        </p>
-        <div class="buttons">
-            <button class="btn btn-yes" id="yesBtn">Evet 💖</button>
-            <button class="btn btn-no" id="noBtn">Hayır</button>
-        </div>
-        <div class="error-message" id="errorMsg">ERROR (Hayır cevabı bulunamadı!)</div>
+    <h1 id="mainTitle">Sana Duygularımı Anlatmak İstiyorum Belinayım</h1>
+    <div class="question">Dinlemek ister misin?</div>
+    <div class="buttons">
+        <button class="btn btn-yes" id="yesBtn">Evet 💖</button>
+        <button class="btn btn-no" id="noBtn">Hayır</button>
+    </div>
+    <div class="error-message" id="errorMsg">ERROR (Hayır cevabı bulunamadı!)</div>
+
+    <div class="envelope-container" id="envelope">
+        <div class="envelope"></div>
+        <div class="flap"></div>
+        <div class="letter" id="letter">Tıkla ve aç ❤️</div>
     </div>
 
-    <div class="love-text" id="loveText">Seni Seviyorum 💞</div>
+    <div class="message-container" id="messageBox">
+        <p>"Biliyor musun, bazen kendime şaşıyorum… Çünkü içimde sana karşı büyüyen bu duygular, her geçen gün sanki tekrardan aşık oluyorum. İlk günkü heyecanla kalbim çarpıyor her sesini duyduğumda, her gözlerine baktığımda. Seni tanıdıkça hayranlığım daha da büyüyor, büyüleyici bir kadınsın kesinlikle; senin o tatlı gülümsemelerin, tatlı bakışların, kehribar gözlerin, o tatlı yanakların en basit hareketlerin bile içimde fırtınalar koparıyor. Hep derdim, insan bir kere âşık olur diye... Ama sen bana her gün yeniden aşık olmanın ne demek olduğunu öğrettin. İnan bana, içimdeki bu sevgi hiç eksilmiyor; aksine büyüyor, çoğalıyor ve her an seni daha çok seviyorum. Bazen kendi kalp atışlarımı bile anlamakta zorlanıyorum... Belki bu da aşkın en güzel şaşkınlığıdır. Hayranım sana kadın..."</p>
+        <button class="next-btn" id="nextBtn">Devam Et 💞</button>
+    </div>
+
     <canvas id="heartCanvas"></canvas>
 
     <script>
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const errorMsg = document.getElementById('errorMsg');
-        const messageBox = document.getElementById('message-box');
-        const loveText = document.getElementById('loveText');
+        const envelope = document.getElementById('envelope');
+        const messageBox = document.getElementById('messageBox');
+        const nextBtn = document.getElementById('nextBtn');
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
+        const mainTitle = document.getElementById('mainTitle');
 
-        noBtn.addEventListener('click', () => { errorMsg.style.display = 'block'; });
+        noBtn.addEventListener('click', () => {
+            errorMsg.style.display = 'block';
+        });
 
         yesBtn.addEventListener('click', () => {
+            document.querySelector('.buttons').style.display = 'none';
+            document.querySelector('.question').style.display = 'none';
+            envelope.style.display = 'block';
+        });
+
+        envelope.addEventListener('click', () => {
+            envelope.classList.add('opened');
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                messageBox.style.display = 'block';
+            }, 1500);
+        });
+
+        nextBtn.addEventListener('click', () => {
             messageBox.style.display = 'none';
-            loveText.style.display = 'block';
             canvas.style.display = 'block';
+            mainTitle.innerText = " SENİ SEVİYORUMM BELİNAYIMMM BÜYÜLEYİCİ KADINIM";
             resizeCanvas();
             startHearts();
         });
 
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         window.addEventListener('resize', resizeCanvas);
 
         let hearts = [];
         function startHearts() {
             setInterval(() => {
-                hearts.push({ x: Math.random() * canvas.width, y: canvas.height + 10, size: Math.random() * 20 + 10, speed: Math.random() * 2 + 1 });
-            }, 300);
+                hearts.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height + 10,
+                    size: Math.random() * 20 + 10,
+                    speed: Math.random() * 2 + 1,
+                    color: getRandomColor()
+                });
+            }, 100);
             requestAnimationFrame(animate);
         }
 
-        function drawHeart(x, y, size) {
+        function getRandomColor() {
+            const colors = ['#ff69b4', '#ff1493', '#ffb6c1', '#ff4da6', '#ff66cc', '#f06292', '#ff80ab'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function drawHeart(x, y, size, color) {
             ctx.save();
             ctx.beginPath();
             ctx.moveTo(x, y);
@@ -74,7 +118,7 @@
             ctx.bezierCurveTo(x, y + size * 1.5, x + size, y + size, x + size, y);
             ctx.bezierCurveTo(x + size, y - size/2, x, y - size/2, x, y);
             ctx.closePath();
-            ctx.fillStyle = '#ff69b4';
+            ctx.fillStyle = color;
             ctx.fill();
             ctx.restore();
         }
@@ -83,11 +127,11 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < hearts.length; i++) {
                 hearts[i].y -= hearts[i].speed;
-                drawHeart(hearts[i].x, hearts[i].y, hearts[i].size);
+                drawHeart(hearts[i].x, hearts[i].y, hearts[i].size, hearts[i].color);
             }
             hearts = hearts.filter(h => h.y + h.size * 2 > 0);
             requestAnimationFrame(animate);
         }
     </script>
 </body>
-</html>  bu kodların arasında zarf ve kalp yok
+</html>
