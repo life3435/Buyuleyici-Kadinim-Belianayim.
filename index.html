@@ -37,7 +37,7 @@
     <div class="envelope-container" id="envelope">
         <div class="envelope"></div>
         <div class="flap"></div>
-        <div class="letter" id="letter">Tıkla ve aç ❤️</div>
+        <div class="letter" id="letter">Kalbin üstüne bas prensesim ❤️</div>
     </div>
 
     <div class="message-container" id="messageBox">
@@ -65,6 +65,7 @@
         yesBtn.addEventListener('click', () => {
             document.querySelector('.buttons').style.display = 'none';
             document.querySelector('.question').style.display = 'none';
+            mainTitle.innerText = "Kalbin üstüne bas prensesim ❤️";
             envelope.style.display = 'block';
         });
 
@@ -73,6 +74,7 @@
             setTimeout(() => {
                 envelope.style.display = 'none';
                 messageBox.style.display = 'block';
+                mainTitle.innerText = "Bu da sana olan duygularım hayatım ❤️";
             }, 1500);
         });
 
